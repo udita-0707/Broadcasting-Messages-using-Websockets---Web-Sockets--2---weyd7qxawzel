@@ -17,9 +17,20 @@ app.get('/', (req, res) => {
 
 // Handle WebSocket connections
 io.on('connection', (socket) => {
+  console.log('A user connected');
 
-  //write your code here
+  // Listen for 'message' events from this client
+  socket.on('message', (message) => {
+    console.log(`Received message: ${message}`);
 
+    // Broadcast the message to all other clients
+    socket.broadcast.emit('message', message);
+  });
+
+  // Handle disconnection
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
 });
 
 // Start the server
